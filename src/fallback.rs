@@ -46,6 +46,25 @@ pub unsafe trait Allocator {
     ///
     /// See [`alloc::alloc::Allocator::deallocate`].
     unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout);
+
+    /// See [`alloc::alloc::Allocator::by_ref`].
+    fn by_ref(&self) -> &Self {
+        self
+    }
+}
+
+// SAFETY: This impl simply forwards to `A`.
+unsafe impl<A: Allocator> Allocator for &A {
+    fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {
+        A::allocate(*self, layout)
+    }
+
+    unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout) {
+        // SAFETY: Checked by caller.
+        unsafe {
+            A::deallocate(*self, ptr, layout);
+        }
+    }
 }
 
 /// A fallback for [`alloc::alloc::Global`], which is currently unstable.
