@@ -1,0 +1,17 @@
+[package]
+name = "allocator-fallback"
+version = "0.1.0"
+edition = "2018"
+rust-version = "1.52"
+description = "Minimal fallback for the standard library’s allocator API"
+documentation = "https://docs.rs/allocator-fallback"
+readme = "misc/crate-readme.md"
+repository = "https://github.com/taylordotfish/allocator-fallback"
+license = "Apache-2.0"
+keywords = ["allocator", "fallback"]
+categories = ["no-std"]
+
+[features]
+default = ["std"]
+allocator_api = []
+std = []
