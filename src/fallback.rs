@@ -48,7 +48,10 @@ pub unsafe trait Allocator {
     unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout);
 
     /// See [`alloc::alloc::Allocator::by_ref`].
-    fn by_ref(&self) -> &Self {
+    fn by_ref(&self) -> &Self
+    where
+        Self: Sized,
+    {
         self
     }
 }

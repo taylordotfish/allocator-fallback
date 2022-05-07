@@ -47,8 +47,7 @@ pub use alloc::alloc::{AllocError, Allocator, Global};
 #[test]
 fn test() {
     use alloc::alloc::Layout;
-    fn takes_allocator(_: impl Allocator) {}
-    takes_allocator(Global);
+    let _: &dyn Allocator = &Global;
     let ptr = Global.allocate(Layout::new::<u64>()).unwrap();
     unsafe {
         ptr.cast::<u64>().as_ptr().write(0x123456789abcdef);
