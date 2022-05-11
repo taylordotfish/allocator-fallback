@@ -29,6 +29,7 @@ impl Display for AllocError {
 }
 
 #[cfg(feature = "std")]
+#[cfg_attr(feature = "doc_cfg", doc(cfg(feature = "std")))]
 impl std::error::Error for AllocError {}
 
 /// A fallback for [`alloc::alloc::Allocator`], which is currently unstable.
