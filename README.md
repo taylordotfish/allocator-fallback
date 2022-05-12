@@ -2,8 +2,7 @@ allocator-fallback
 ==================
 
 This crate provides a minimal fallback for the standard library’s allocator
-API, which is currently unstable. It doesn’t provide everything that the
-standard library offers, but it provides enough for basic use cases.
+API, which is currently unstable.
 
 Crate features
 --------------

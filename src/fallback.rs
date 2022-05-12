@@ -16,6 +16,7 @@
 
 use alloc::alloc::Layout;
 use core::fmt::{self, Display, Formatter};
+use core::mem::MaybeUninit;
 use core::ptr::{self, NonNull};
 
 /// A fallback for [`alloc::alloc::AllocError`], which is currently unstable.
@@ -47,6 +48,91 @@ pub unsafe trait Allocator {
     ///
     /// See [`alloc::alloc::Allocator::deallocate`].
     unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout);
+
+    /// See [`alloc::alloc::Allocator::allocate_zeroed`].
+    ///
+    /// # Safety
+    ///
+    /// See [`alloc::alloc::Allocator::allocate_zeroed`].
+    fn allocate_zeroed(
+        &self,
+        layout: Layout,
+    ) -> Result<NonNull<[u8]>, AllocError> {
+        let ptr = self.allocate(layout)?;
+        // SAFETY: Checked by caller.
+        unsafe {
+            let len = (*(ptr.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            (ptr.as_ptr() as *mut u8).write_bytes(0_u8, len);
+        }
+        Ok(ptr)
+    }
+
+    /// See [`alloc::alloc::Allocator::grow`].
+    ///
+    /// # Safety
+    ///
+    /// See [`alloc::alloc::Allocator::grow`].
+    unsafe fn grow(
+        &self,
+        ptr: NonNull<u8>,
+        old_layout: Layout,
+        new_layout: Layout,
+    ) -> Result<NonNull<[u8]>, AllocError> {
+        let new = self.allocate(new_layout)?;
+        // SAFETY: Checked by caller.
+        unsafe {
+            (new.as_ptr() as *mut u8)
+                .copy_from_nonoverlapping(ptr.as_ptr(), old_layout.size());
+            self.deallocate(ptr, old_layout);
+        }
+        Ok(new)
+    }
+
+    /// See [`alloc::alloc::Allocator::grow_zeroed`].
+    ///
+    /// # Safety
+    ///
+    /// See [`alloc::alloc::Allocator::grow_zeroed`].
+    unsafe fn grow_zeroed(
+        &self,
+        ptr: NonNull<u8>,
+        old_layout: Layout,
+        new_layout: Layout,
+    ) -> Result<NonNull<[u8]>, AllocError> {
+        let new = self.allocate(new_layout)?;
+        // SAFETY: Checked by caller.
+        unsafe {
+            let len = (*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            (new.as_ptr() as *mut u8)
+                .copy_from_nonoverlapping(ptr.as_ptr(), old_layout.size());
+            (new.as_ptr() as *mut u8)
+                .add(old_layout.size())
+                .write_bytes(0_u8, len - old_layout.size());
+            self.deallocate(ptr, old_layout);
+        }
+        Ok(new)
+    }
+
+    /// See [`alloc::alloc::Allocator::shrink`].
+    ///
+    /// # Safety
+    ///
+    /// See [`alloc::alloc::Allocator::shrink`].
+    unsafe fn shrink(
+        &self,
+        ptr: NonNull<u8>,
+        old_layout: Layout,
+        new_layout: Layout,
+    ) -> Result<NonNull<[u8]>, AllocError> {
+        let new = self.allocate(new_layout)?;
+        unsafe {
+            let len = (*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            (new.as_ptr() as *mut u8)
+                .copy_from_nonoverlapping(ptr.as_ptr(), len);
+            self.deallocate(ptr, old_layout);
+        }
+        Ok(new)
+    }
 
     /// See [`alloc::alloc::Allocator::by_ref`].
     fn by_ref(&self) -> &Self
