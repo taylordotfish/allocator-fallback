@@ -125,6 +125,7 @@ pub unsafe trait Allocator {
         new_layout: Layout,
     ) -> Result<NonNull<[u8]>, AllocError> {
         let new = self.allocate(new_layout)?;
+        // SAFETY: Checked by caller.
         unsafe {
             let len = (*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
             (new.as_ptr() as *mut u8)
