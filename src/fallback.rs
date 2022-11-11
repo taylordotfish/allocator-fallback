@@ -145,7 +145,10 @@ pub unsafe trait Allocator {
 }
 
 // SAFETY: This impl simply forwards to `A`.
-unsafe impl<A: Allocator> Allocator for &A {
+unsafe impl<A> Allocator for &A
+where
+    A: Allocator + ?Sized,
+{
     fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {
         A::allocate(*self, layout)
     }
