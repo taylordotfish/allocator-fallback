@@ -56,6 +56,7 @@
 //!    if allocator_fallback::HAS_ALLOCATOR_API {
 //!        println!("cargo:rustc-cfg=has_allocator_api");
 //!    }
+//!    println!("cargo:rerun-if-changed=build.rs");
 //! }
 //! ```
 //!
@@ -94,6 +95,7 @@
 //!    if allocator_fallback::HAS_ALLOCATOR_API {
 //!        println!("cargo:rustc-cfg=has_allocator_api");
 //!    }
+//!    println!("cargo:rerun-if-changed=build.rs");
 //! }
 //! ```
 //!
