@@ -59,7 +59,7 @@ pub unsafe trait Allocator {
         let ptr = self.allocate(layout)?;
         // SAFETY: `Self::allocate` always returns a pointer to valid memory.
         unsafe {
-            let len = (*(ptr.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            let len = (&*(ptr.as_ptr() as *mut [MaybeUninit<u8>])).len();
             (ptr.as_ptr() as *mut u8).write_bytes(0_u8, len);
         }
         Ok(ptr)
@@ -102,7 +102,7 @@ pub unsafe trait Allocator {
         // Sizes are checked by caller (new size must not be less than old
         // size).
         unsafe {
-            let len = (*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            let len = (&*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
             (new.as_ptr() as *mut u8)
                 .copy_from_nonoverlapping(ptr.as_ptr(), old_layout.size());
             (new.as_ptr() as *mut u8)
@@ -129,7 +129,7 @@ pub unsafe trait Allocator {
         // Sizes are checked by caller (new size must not be greater than old
         // size).
         unsafe {
-            let len = (*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
+            let len = (&*(new.as_ptr() as *mut [MaybeUninit<u8>])).len();
             (new.as_ptr() as *mut u8)
                 .copy_from_nonoverlapping(ptr.as_ptr(), len);
             self.deallocate(ptr, old_layout);
