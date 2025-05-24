@@ -20,6 +20,7 @@
 #![cfg_attr(feature = "allocator_api", feature(allocator_api))]
 #![cfg_attr(feature = "doc_cfg", feature(doc_cfg))]
 #![deny(unsafe_op_in_unsafe_fn)]
+#![allow(clippy::needless_doctest_main)]
 
 //! This crate provides a minimal fallback for the standard library’s allocator
 //! API, which is currently unstable.

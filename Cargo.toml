@@ -17,5 +17,9 @@ allocator_api = []
 doc_cfg = []
 std = []
 
+[lints.rust.unexpected_cfgs]
+level = "warn"
+check-cfg = ["cfg(has_allocator_api)"]
+
 [package.metadata.docs.rs]
 features = ["doc_cfg"]
