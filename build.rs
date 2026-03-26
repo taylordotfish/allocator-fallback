@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 taylor.fish <contact@taylor.fish>
+ * Copyright 2022, 2026 taylor.fish <contact@taylor.fish>
  *
  * This file is part of allocator-fallback.
  *
@@ -39,8 +39,15 @@ fn compile<P: AsRef<Path>>(path: P) -> io::Result<bool> {
 
 fn main() -> io::Result<()> {
     env::set_current_dir(PathBuf::from_iter(&["misc", "feature-test"]))?;
-    if compile("allocator_api.rs")? {
+    if !cfg!(feature = "allocator_api") {
+    } else if compile("allocator_api.rs")? {
         println!("cargo:rustc-cfg=has_allocator_api");
+    } else {
+        println!(
+            "cargo:warning=feature `allocator_api` was enabled, but this \
+            version of Rust doesn't support `#![feature(allocator_api)]` -- \
+            ignoring the feature, but this configuration is not recommended",
+        );
     }
     println!("cargo:rerun-if-changed=build.rs");
     Ok(())
