@@ -18,7 +18,6 @@
 
 #![cfg_attr(not(any(feature = "std", doc)), no_std)]
 #![cfg_attr(has_allocator_api, feature(allocator_api))]
-#![cfg_attr(feature = "doc_cfg", feature(doc_cfg))]
 #![deny(unsafe_op_in_unsafe_fn)]
 #![allow(clippy::needless_doctest_main)]
 
@@ -43,10 +42,10 @@
 //!
 //! ```toml
 //! [dependencies]
-//! allocator-fallback = "0.1.9"
+//! allocator-fallback = "0.1.10"
 //!
 //! [build-dependencies]
-//! allocator-fallback = "0.1.9"
+//! allocator-fallback = "0.1.10"
 //! ```
 //!
 //! **Note:** It is very important that the two dependencies are identical. Do
@@ -89,11 +88,11 @@
 //!
 //! ```toml
 //! [dependencies.allocator-fallback]
-//! version = "0.1.9"
+//! version = "0.1.10"
 //! optional = true
 //!
 //! [build-dependencies.allocator-fallback]
-//! version = "0.1.9"
+//! version = "0.1.10"
 //! optional = true
 //! ```
 //!

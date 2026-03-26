@@ -22,10 +22,10 @@ regular dependency and a build dependency:
 
 ```toml
 [dependencies]
-allocator-fallback = "0.1.9"
+allocator-fallback = "0.1.10"
 
 [build-dependencies]
-allocator-fallback = "0.1.9"
+allocator-fallback = "0.1.10"
 ```
 
 **Note:** It is very important that the two dependencies are identical. Do
@@ -68,11 +68,11 @@ If you’d like allocator-fallback to be an optional dependency, first add
 
 ```toml
 [dependencies.allocator-fallback]
-version = "0.1.9"
+version = "0.1.10"
 optional = true
 
 [build-dependencies.allocator-fallback]
-version = "0.1.9"
+version = "0.1.10"
 optional = true
 ```
 

@@ -1,6 +1,6 @@
 [package]
 name = "allocator-fallback"
-version = "0.1.9"
+version = "0.1.10"
 edition = "2018"
 rust-version = "1.52"
 description = "Minimal fallback for the standard library’s allocator API"
@@ -14,12 +14,10 @@ categories = ["no-std"]
 [features]
 default = ["std"]
 allocator_api = []
-doc_cfg = []
 std = []
+# This feature is now unused.
+doc_cfg = []
 
 [lints.rust.unexpected_cfgs]
 level = "warn"
 check-cfg = ["cfg(has_allocator_api)"]
-
-[package.metadata.docs.rs]
-features = ["doc_cfg"]

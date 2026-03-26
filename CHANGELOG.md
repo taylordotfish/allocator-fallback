@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.1.10
+------
+
+* Removed the unstable `doc_cfg` feature. It only adds confusion by making it
+  seem like the crate doesn't provide `Allocator` when `allocator_api` is
+  enabled, when in reality it does; the only difference is which implementation
+  is provided (standard library vs. fallback). For compatibility, the crate
+  still defines a `doc_cfg` feature that does nothing.
+
 0.1.9
 -----
 
